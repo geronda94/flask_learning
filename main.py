@@ -1,4 +1,6 @@
-import requests
+from requests_html import HTMLSession
 
-res = requests.get('https://mail.ru')
+
+session = HTMLSession()
+res = session.get('https://mail.ru')
 print(res.text)
