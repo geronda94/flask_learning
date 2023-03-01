@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-
+import flask
 
 
 menu = ['Главная', 'О нас', 'Еще один пункк']
