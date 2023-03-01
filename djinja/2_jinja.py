@@ -9,15 +9,16 @@ class Person:
 
 
 
-name = 'Goga'
 per = Person('Google', 22)
 
+data = """{%raw%} Модуль Jinja определяет имя {{name}}{% endraw %}"""
+#data = """ Модуль Jinja определяет имя {{name}}"""
 
 
-tm = Template("Привет {{ p.name.upper() }}, Твой возраст {{ p.age }}")
-msg =  tm.render(p=per)
+tm = Template(data)
+msg2 = tm.render(name = per.name)
 
-print(msg)
+print(msg2)
 
 
 
