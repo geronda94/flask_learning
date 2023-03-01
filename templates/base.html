@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title -%}
+    {% if title %}
+        <title>Про FLASK - {{ title }}</title>
+    {% else %}
+        <title>Про FLASK</title>
+    {% endif %}
+    {% endblock %}
+</head>
+
+<body>
+  {% block content -%}
+
+    <ul>
+      {%- block mainmenu -%}
+
+        {% for m in menu -%}
+        <li>{{m}}</li>
+        {% endfor -%}
+      {% endblock mainmenu -%}
+    </ul>
+
+    <div class="block">
+    {% if title -%}
+        <h1>{{ title }}</h1>
+    {% else %}
+        <h1>Про FLASK</h1>
+    {% endif %}
+    </div>
+  {% endblock -%}
+</body>
+</html>
