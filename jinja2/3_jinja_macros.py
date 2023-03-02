@@ -55,9 +55,9 @@ def persons_upper():
 
 
 def dry():
-    html = '''
-    {% macro input(name, value=" ", type="text", size="20") -%}
-        <input type="{{ type }}" name="{{ name }}" value="{{ value | e }}" size="{{ size }}">
+
+    html = '''{% macro input(name, value=" ", type="text", size="40") -%}
+    <input type="{{ type }}" name="{{ name }}" value="{{ value | e }}" size="{{ size }}">
     {% endmacro %}
     <p>{{ input("username") }}</p>
     <p>{{ input("email") }}</p>
@@ -69,7 +69,40 @@ def dry():
     return msg
 
 
-print(dry())
+def macro_users():
+    html = '''{% macro list_users(list_of_user) -%}
+        <ul>
+        {% for u in list_of_user -%}
+            <li> {{ u.name }}</li>
+        {% endfor -%}
+        </ul>
+        {%- endmacro %}     
+        {{ list_users(users) }}'''
+
+
+    html2 = '''{% macro list_users(list_of_user) -%}
+            <ul>
+            {% for u in list_of_user -%}
+                <li> {{ u.name }} {{ caller(u) }}</li>
+            {% endfor -%}
+            </ul>
+            {%- endmacro %}     
+            
+            {% call(user) list_users(users) -%}
+                <ul>
+                    <li>age: {{ user.old }} </li>
+                    <li>weight: {{ user.weight }} </li>
+                </ul>
+            {% endcall -%}'''
+
+
+
+    tm = Template(html2)
+    return tm.render(users=persons)
+
+
+
+print(macro_users())
 
 
 
