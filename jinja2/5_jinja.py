@@ -13,10 +13,10 @@ def file_loader(): #Функция возвращает данные из заг
     file_loader = FileSystemLoader('templates')
     env = Environment(loader=file_loader)
 
-    tm = env.get_template('main.html')
-    return tm.render(users=persons)
+    tm = env.get_template('page.htm')
+    return tm.render(domain='www.ru', title='Some web-site')
 
-
+print(file_loader())
 
 
 
