@@ -8,6 +8,13 @@ cars = [
     {'model':'Tesla', 'price':30000},
 ]
 
+persons = [
+    {'name':'Bob', 'old':18, 'weight':'90'},
+    {'name':'Marc', 'old':50, 'weight':'74'},
+    {'name':'Viks', 'old':18, 'weight':'70'},
+    {'name':'Jhon', 'old':36, 'weight':'94'}
+]
+
 
 
 price = [200,300,100]
@@ -33,14 +40,6 @@ def repl(): #Выводит сумму всех значений с ключем
     tm = Template(tpl)
     return tm.render(cs=cars)
 
-
-
-persons = [
-    {'name':'Bob', 'old':18, 'weight':'90'},
-    {'name':'Marc', 'old':50, 'weight':'74'},
-    {'name':'Viks', 'old':18, 'weight':'70'},
-    {'name':'Jhon', 'old':36, 'weight':'94'}
-]
 
 def persons_upper():
     tpl = '''

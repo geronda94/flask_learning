@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <ul>
+    {% for u in users -%}
+      <li>{{ u.name }}
+        <ul>
+            <li>{{ u.weight }}</li>
+            <li>{{ u.old }}</li>
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+
+
+</body>
+</html>
