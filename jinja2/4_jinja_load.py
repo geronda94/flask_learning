@@ -1,4 +1,4 @@
-from jinja2 import Template, Environment, FileSystemLoader
+from jinja2 import Template, Environment, FileSystemLoader, FunctionLoader
 
 persons = [
     {'name':'Bob', 'old':18, 'weight':'90'},
@@ -7,8 +7,8 @@ persons = [
     {'name':'Jhon', 'old':36, 'weight':'94'}
 ]
 
-
-def html_loader():
+# Демонстрация работы загрузчика который возвращет html из файла
+def file_loader(): #Функция возвращает данные из загрузчика локальных файлов
     file_loader = FileSystemLoader('templates')
     env = Environment(loader=file_loader)
 
@@ -16,9 +16,23 @@ def html_loader():
     return tm.render(users=persons)
 
 
+def func_loader(): #Демонстрация работы загрузчика который подгружает html через функцию
+    def loadTPL(path): #создаем ссылку для вызова через загрузчик
+        if path == "index":
+            return '''Имя {{ u.name }}, возраст {{ u.old }}'''
+        else:
+            return '''Данные: {{ u }}'''
 
 
-print(html_loader())
+
+    file_loader = FunctionLoader(loadTPL) #Передаем ссылку на прописанную только что функцию
+    env = Environment(loader=file_loader)
+
+    tm = env.get_template('index')
+    return tm.render(u=persons[0])
+
+
+print(func_loader())
 
 
 
