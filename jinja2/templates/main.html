@@ -7,8 +7,8 @@
 <body>
 
   <ul>
-    {% for u in users -%}
-      <li>{{ u.name }} </li>
+    {% for u, m in users.items() -%}
+      <li><a href="{{ u}}"> {{ m }}</a></li>
     {% endfor %}
   </ul>
 

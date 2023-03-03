@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <menu>
-        <a href="/index">Главная</a>
-        <a href="/about">О нас</a>
-    </menu>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" />
+
     <meta charset="UTF-8">
     {% block title -%}
     {% if title %}
@@ -13,27 +12,34 @@
         <title>Про FLASK</title>
     {% endif %}
     {% endblock %}
+    
 </head>
 
 <body>
-  {% block content -%}
 
-    <ul>
-      {%- block mainmenu -%}
 
-        {% for m in menu -%}
-        <li>{{m}}</li>
-        {% endfor -%}
-      {% endblock mainmenu -%}
-    </ul>
+    
+    <div class="clear"></div>
+    <div class="content">
+    {% block content -%}
 
-    <div class="block">
+        <ul class="mainmenu">
+          {%- block mainmenu -%}
+
+            {% for m in menu -%}
+            <li><a href="{{ m.url }}">{{ m.name }}</a></li>
+            {% endfor -%}
+          {% endblock mainmenu -%}
+        </ul>
+
+    
     {% if title -%}
         <h1>{{ title }}</h1>
     {% else %}
         <h1>Про FLASK</h1>
     {% endif %}
+    {% endblock -%}
     </div>
-  {% endblock -%}
+
 </body>
 </html>

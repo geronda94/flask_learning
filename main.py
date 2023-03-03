@@ -2,7 +2,11 @@ from flask import Flask, render_template, request, url_for
 
 
 
-menu = ['Главная', 'О нас', 'Еще один пункт']
+menu = [
+    {'name':'Установка', 'url':'install-flask'},
+    {'name':'Первое приложение', 'url':'first-app'},
+    {'name':'Обратная связь', 'url':'contact'}
+]
 
 
 
@@ -21,6 +25,13 @@ def index():
 def about():
     return render_template('about.html', title="О сайте", menu=menu)
 
+
+@app.route("/contact", methods=["POST", "GET"])
+def contact():
+    if request.method == 'POST':
+        print(request.form)
+        print(request.form.get('username'))
+    return render_template('contact.html', title='Обратная связь', menu=menu)
 
 #@app.route("/profile/<int:username>/<path>")
 #@app.route("/profile/<path: username>")#а эта конструкция будет все одной ссылкой /profile/username/next
