@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, flash
 
 
 
@@ -8,10 +8,11 @@ menu = [
     {'name':'Обратная связь', 'url':'contact'}
 ]
 
-
-
-
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '123456789'
+
+
+
 
 @app.route('/index')
 @app.route("/")
@@ -21,23 +22,31 @@ def index():
     print(url_for('index')) #Выводит url если он соотвествует именно этому значнию
     return render_template('index.html', title="Главная страница", menu=menu)
 
+
 @app.route("/about")
 def about():
     return render_template('about.html', title="О сайте", menu=menu)
 
-
-@app.route("/contact", methods=["POST", "GET"])
-def contact():
-    if request.method == 'POST':
-        print(request.form)
-        print(request.form.get('username'))
-    return render_template('contact.html', title='Обратная связь', menu=menu)
 
 #@app.route("/profile/<int:username>/<path>")
 #@app.route("/profile/<path: username>")#а эта конструкция будет все одной ссылкой /profile/username/next
 @app.route("/profile/<username>")#Такая конструкция будет считать другой сслыкой все что будет выглядеть так /profile/username/next
 def profile(username):
     return f'Пользователь {username}'
+
+
+
+@app.route("/contact", methods=["POST", "GET"])
+def contact():
+    if request.method == 'POST':
+        if len(request.form['username']) < 2:
+            flash('Сообщение отправлено')
+        else:
+            flash('Ошибка отправки')
+
+    return render_template('contact.html', title='Обратная связь', menu=menu)
+
+
 
 
 with app.test_request_context():
