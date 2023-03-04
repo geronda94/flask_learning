@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, g
 import os
 import sqlite3
 import psycopg2
+from FDataBase import FDataBase
 
 DATABASE = 'tmp/flsite.db'
 DEBUG = True
@@ -39,7 +40,8 @@ def get_db():
 @app.route('/')
 def index():
     db = get_db()
-    return render_template('index.html', menu=[])
+    dbase = FDataBase(db)
+    return render_template('index.html', menu=dbase.getMenu())
 
 
 @app.teardown_appcontext
