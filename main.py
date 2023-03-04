@@ -21,7 +21,7 @@ app.config['SECRET_KEY'] = '123456789'
 def index():
     ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
     print(ip_address)
-    return render_template('index.html', title="Главная страница", menu=menu)
+    return render_template('index2.html', title="Главная страница", menu=menu)
 
 
 @app.route("/about")
