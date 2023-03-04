@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, url_for, flash, session, redirect, abort
 
-
 menu = [
     {'name':'Установка', 'url':'install-flask'},
     {'name':'Первое приложение', 'url':'first-app'},
@@ -8,8 +7,13 @@ menu = [
     {'name':'Обратная связь', 'url':'contact'}
 ]
 
+
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '123456789'
+
+
 
 
 @app.route('/index')

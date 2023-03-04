@@ -1,69 +1,86 @@
-html, body{
-	font-family: 'Arial';
-	margin: 0;
-	padding: 0;
-	height:100%;
-	weight: 100%;
+html, body {
+font-family: 'Arial';
+margin: 0;
+padding: 0;
+height: 100%;
+weight: 100%;
 }
 
 a {
-	color: #0059b2;
-	text-decoration: none
+color: #0059b2;
+text-decoration: none;
 }
 
 a:hover {
-	color:#CC0000;
-	text-decoration: underline;
+color: #CC0000;
+text-decoration: underline;
 }
 
-.clear {clear: both;}
-
-ul.mainmenu{
-	padding: auto 10px;
+.clear {
+clear: both;
 }
 
+ul.mainmenu {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+padding: 20px;
+padding-left:20%;
+padding-right:auto;
+margin:0;
+background-color: #333;
+text-align: center;
+}
 
 ul.mainmenu li {
+display: inline-block; /* Добавлено свойство для отображения элементов в одну строку */
 float: left;
-margin: auto 20px;
+margin: 0 30px;
 }
 
-ul.mainmenu li.last {float: right;}
-
-ul.mainmenu li a{color: #fdc073;
-text-decoration:none;
+ul.mainmenu li.last {
+float: right;
 }
 
-ul.mainmenu li a:hover{
-	color:#FDA83D;
+ul.mainmenu li a {
+color: #fdc073;
+text-decoration: none;
+font-weight: bold;
+}
+
+ul.mainmenu li a:hover {
+color: #FDA83D;
 }
 
 div.content {
-	margin: 10px;
+margin: 60px 10px 10px;
 }
 
 .form-contact label {
-	display: inline-block;
-	min-width: 80px;
+display: inline-block;
+min-width: 80px;
 }
 
+.form-contact p {
+margin: 10px 0;
+}
 
-.form-contact p{margin: 10px 0 10px 0;}
-.form-contact input[type=submit], textarea{font-size: 16px;}
+.form-contact input[type=submit],
+textarea {
+font-size: 16px;
+}
 
-.flash  {padding: 10px;}
-.flash.success{ 
-	border:1px solid #21DB56;
-	background: #AEFFC5;
- }
+.flash {
+padding: 10px;
+}
+
+.flash.success {
+border: 1px solid #21DB56;
+background: #AEFFC5;
+}
 
 .flash.error {
-    border: 1px solid #21DB56;
-    background: #FF9C9C;
+border: 1px solid #21DB56;
+background: #FF9C9C;
 }
-
-
-
-
-
-
