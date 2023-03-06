@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, flash, abort
+from flask import Flask, render_template, request, g, flash, abort, make_response, redirect, url_for
 import os
 import sqlite3
 from FDataBase import FDataBase
@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
+
 
 
 
@@ -40,10 +41,41 @@ def get_db():
 def index():
     db = get_db()
     dbase = FDataBase(db)
-    men = dbase.getMenu()
-    for i in men:
-        print(list(i))
-    return render_template('index2.html', menu=men, posts=dbase.getPostAnonce())
+    content = render_template('index2.html', menu=dbase.getMenu(), posts=dbase.getPostAnonce())
+    res = make_response(content, 500)
+    res.headers['Content-Type'] = 'text/html'
+    res.headers['Server'] = 'flasksite'
+    return res
+
+@app.route('/flask')
+def flask():
+    return "<h1>Main page</h1>", 200, {'Content-Type':'text/html'}
+
+
+@app.route('/transfer')
+def transfer():
+    return redirect(url_for('flask'), 302)
+
+@app.errorhandler(404)
+def error(error):
+    return ("Страница не найдена", 404)
+
+
+# @app.route('/')
+# def index():
+#     img = None
+#     with app.open_resource(app.root_path+"/static/images_html/img.jpg", mode='rb') as f:
+#         img = f.read()
+#
+#     if img is None:
+#         return "None Image"
+#
+#     res = make_response(img)
+#     res.headers['Content-Type'] = 'image/jpg'
+#     return res
+
+
+
 
 
 @app.route('/add_post', methods=['POST', 'GET'])
@@ -71,9 +103,7 @@ def showPost(alias):
     if not title:
         abort(404)
 
-    return render_template('post.html' ,menu=dbase.getMenu(), title=title, post=post)
-
-
+    return render_template('post.html', menu=dbase.getMenu(), title=title, post=post)
 
 
 
@@ -83,6 +113,28 @@ def close_db(error):
         g.link_db.close()
 
 
+
+
+def before_first_request():
+    print('before first request')
+
+def before_request():
+    print('before request called')
+
+
+app.before_first_request(before_request)
+app.before_first_request(before_first_request)
+
+
+@app.after_request
+def after_request(response):
+    print('after request called')
+    return response
+
+@app.teardown_request
+def teardown_request(response):
+    print('teardown request called')
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
