@@ -36,6 +36,14 @@ def get_db():
     return g.link_db
 
 
+dbase = None
+@app.before_request
+def before_request():
+    global dbase
+    db = get_db()
+    dbase = FDataBase(db)
+
+
 
 @app.route('/')
 def index():
@@ -116,26 +124,32 @@ def close_db(error):
 
 
 
-def before_first_request():
-    print('before first request')
-
-def before_request():
-    print('before request called')
 
 
-app.before_first_request(before_request)
-app.before_first_request(before_first_request)
 
 
-@app.after_request
-def after_request(response):
-    print('after request called')
-    return response
+# def before_first_request():
+#     print('before first request')
+#
+# def before_request():
+#     print('before request called')
+#
+#
+# app.before_first_request(before_request)
+# app.before_first_request(before_first_request)
+#
+#
+# @app.after_request
+# def after_request(response):
+#     print('after request called')
+#     return response
+#
+# @app.teardown_request
+# def teardown_request(response):
+#     print('teardown request called')
+#     return response
 
-@app.teardown_request
-def teardown_request(response):
-    print('teardown request called')
-    return response
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
