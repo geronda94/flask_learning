@@ -47,6 +47,7 @@ def index():
     res.headers['Server'] = 'flasksite'
     return res
 
+
 @app.route('/flask')
 def flask():
     return "<h1>Main page</h1>", 200, {'Content-Type':'text/html'}
