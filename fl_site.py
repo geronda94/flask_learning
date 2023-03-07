@@ -2,18 +2,15 @@ from flask import Flask, render_template, request, g, flash, abort, make_respons
 import os
 import sqlite3
 from FDataBase import FDataBase
+from werkzeug.security import generate_password_hash, check_password_hash
 
 DATABASE = 'flsite.db'
 DEBUG = True
 SECRET_KEY = 'dfsajhfaskjhbcah2138eduihknd3u8923uhfwe'
 
-
 app = Flask(__name__)
 app.config.from_object(__name__)
-
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
-
-
 
 
 def connect_db():
@@ -37,6 +34,8 @@ def get_db():
 
 
 dbase = None
+
+
 @app.before_request
 def before_request():
     global dbase
@@ -44,26 +43,62 @@ def before_request():
     dbase = FDataBase(db)
 
 
-
 @app.route('/')
 def index():
-    db = get_db()
-    dbase = FDataBase(db)
     content = render_template('index2.html', menu=dbase.getMenu(), posts=dbase.getPostAnonce())
-    res = make_response(content, 500)
+    res = make_response(content, 220)
     res.headers['Content-Type'] = 'text/html'
     res.headers['Server'] = 'flasksite'
     return res
 
 
+# @app.route('/register', methods=["POST", "GET"])
+# def register():
+#     if request.method == "POST":
+#         if len(request.form['name']) > 4 and len(request.form['email']) >4\
+#             and len(request.form['psw']) >4 and request.form['psw'] == request.form['psw2']:
+#             hash = generate_password_hash(request.form['psw'])
+#             res = dbase.addUser(request.form['name'],request.form['email'], hash)
+#             if res:
+#                 flash("Вы успешно зарегестрированны", "success")
+#             else:
+#                 flash("Ошибка регистрации", "error")
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if len(request.form['email']) > 4 and len(request.form['psw']) > 4:
+            flash('Соответствие', category='success')
+        else:
+            flash('Не соответствие', category='error')
+    return render_template('login.html', menu=dbase.getMenu(), title='Авторизация')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        if len(request.form['name']) > 4 and len(request.form['email']) > 4 \
+                and len(request.form['psw']) > 4 and request.form['psw'] == request.form['psw2']:
+            hash = generate_password_hash(request.form['psw'])
+            res = dbase.addUser(request.form['name'], request.form['email'], hash)
+            if res:
+                flash('Вы успешно зарегистрированны', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Ошибка при регистрации', 'error')
+    return render_template('register.html', menu=dbase.getMenu(), title='Регистрация')
+
+
 @app.route('/flask')
 def flask():
-    return "<h1>Main page</h1>", 200, {'Content-Type':'text/html'}
+    return "<h1>Main page</h1>", 200, {'Content-Type': 'text/html'}
 
 
 @app.route('/transfer')
 def transfer():
     return redirect(url_for('flask'), 302)
+
 
 @app.errorhandler(404)
 def error(error):
@@ -84,13 +119,8 @@ def error(error):
 #     return res
 
 
-
-
-
 @app.route('/add_post', methods=['POST', 'GET'])
 def addPost():
-    db = get_db()
-    dbase = FDataBase(db)
     if request.method == 'POST':
         if len(request.form['name']) > 4 and len(request.form['post']) > 10:
             res = dbase.addPost(request.form['name'], request.form['post'], request.form['url'])
@@ -103,11 +133,8 @@ def addPost():
     return render_template('add_post.html', menu=dbase.getMenu(), title='Добавление статьи')
 
 
-
 @app.route('/post/<alias>')
 def showPost(alias):
-    db = get_db()
-    dbase = FDataBase(db)
     title, post = dbase.getPost(alias)
     if not title:
         abort(404)
@@ -115,17 +142,10 @@ def showPost(alias):
     return render_template('post.html', menu=dbase.getMenu(), title=title, post=post)
 
 
-
 @app.teardown_appcontext
 def close_db(error):
     if hasattr(g, 'link_db'):
         g.link_db.close()
-
-
-
-
-
-
 
 
 # def before_first_request():
@@ -148,7 +168,6 @@ def close_db(error):
 # def teardown_request(response):
 #     print('teardown request called')
 #     return response
-
 
 
 if __name__ == '__main__':
