@@ -3,6 +3,9 @@ import os
 import sqlite3
 from FDataBase import FDataBase
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager
+
+
 
 DATABASE = 'flsite.db'
 DEBUG = True
@@ -11,6 +14,8 @@ SECRET_KEY = 'dfsajhfaskjhbcah2138eduihknd3u8923uhfwe'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
+
+login_manager = LoginManager(app)
 
 
 def connect_db():
