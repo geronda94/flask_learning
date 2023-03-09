@@ -50,7 +50,6 @@ def get_db():
 
 dbase = None
 
-
 @app.before_request
 def before_request():
     global dbase
@@ -109,8 +108,8 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
-    return f"""<p><a href="{url_for('logout')}">Выйти из профиля</a>
-                <p>user info: {current_user.get_id()}"""
+    id = current_user.get_id()
+    return render_template('profile.html', menu=dbase.getMenu(), title='Профиль', user_info=dbase.getUserInfo(id))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -127,6 +126,15 @@ def register():
                 flash('Ошибка при регистрации', 'error')
     return render_template('register.html', menu=dbase.getMenu(), title='Регистрация')
 
+
+@app.route('/userava')
+def userava():
+    return 'userava'
+
+
+@app.route('/upload')
+def upload():
+    return 'upload'
 
 @app.route('/flask')
 def flask():
