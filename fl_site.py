@@ -13,7 +13,7 @@ SECRET_KEY = 'dfsajhfaskjhbcah2138eduihknd3u8923uhfwe'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
+app.config.update(dict(DATABASE=os.path.join(app.root_path, 'templates/flsite.db')))
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
