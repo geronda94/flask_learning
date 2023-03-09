@@ -65,7 +65,7 @@ def index():
     res.headers['Content-Type'] = 'text/html'
     res.headers['Server'] = 'flasksite'
     return res
-
+#
 
 # @app.route('/register', methods=["POST", "GET"])
 # def register():
