@@ -108,8 +108,7 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
-    id = current_user.get_id()
-    return render_template('profile.html', menu=dbase.getMenu(), title='Профиль', user_info=dbase.getUserInfo(id))
+    return render_template('profile.html', menu=dbase.getMenu(), title='Профиль')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -128,13 +127,37 @@ def register():
 
 
 @app.route('/userava')
+@login_required
 def userava():
-    return 'userava'
+    img = current_user.getAvatar(app)
+    if not img:
+        return ""
+
+    h = make_response(img)
+    h.headers['Content-Type'] = 'image/png'
+
+    return h
 
 
-@app.route('/upload')
+@app.route('/upload', methods=['POST', 'GET'])
+@login_required
 def upload():
-    return 'upload'
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and current_user.verifyExt(file.filename):
+            try:
+                img = file.read()
+                res = dbase.updateUserAvatar(img, current_user.get_id())
+                if not res:
+                    flash('Ошибка обновления аватара', 'error')
+                    return redirect(url_for('profile'))
+                flash('Аватар успешно обновлен', 'success')
+
+            except FileNotFoundError as ex:
+                flash('Ошибка чтения файла', 'error')
+
+    return redirect(url_for('profile'))
+
 
 @app.route('/flask')
 def flask():

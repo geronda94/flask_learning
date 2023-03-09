@@ -73,7 +73,7 @@ class FDataBase:
             self.__cur.execute(f"SELECT COUNT() as 'count' FROM users WHERE email LIKE '{email}'")
             res = self.__cur.fetchone()
             if res['count'] > 0:
-                print('ПОльзователь с таким email уже существует')
+                print('Пользователь с таким email уже существует')
                 return False
 
             self.__cur.execute(f"INSERT INTO users VALUES(NULL, ?, ?, ?, NULL, ?)", (name, email, password, tm))
@@ -100,7 +100,7 @@ class FDataBase:
             print(f'Ошибка при получени данных из БД {ex}')
             return False
 
-    def  getUserByEmail(self, email):
+    def getUserByEmail(self, email):
         try:
             self.__cur.execute(f"SELECT * FROM users WHERE email='{email}' LIMIT 1")
             res = self.__cur.fetchone()
@@ -115,17 +115,14 @@ class FDataBase:
         return False
 
 
-    def getUserInfo(self, id):
+    def updateUserAvatar(self, avatar, user_id):
+        if not avatar:
+            return False
         try:
-            self.__cur.execute(f"SELECT * FROM users WHERE id='{id}' LIMIT 1;")
-            res = self.__cur.fetchone()
-            if not res:
-                print('Пользователь не найден')
-                return False
-            else:
-                return (res['name'], res['email'])
-
+            binary = sqlite3.Binary(avatar)
+            self.__cur.execute(f'UPDATE users SET avatar = ? WHERE id = ?;', (binary, user_id))
+            self.__db.commit()
         except sqlite3.Error as e:
-            print('Ошибка  получения данных из БД', + str(e))
-
-        return False
+            print('Ошибка обновления аватара в БД: '+str(e))
+            return False
+        return True

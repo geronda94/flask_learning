@@ -19,11 +19,9 @@
         <td valign="top" class="profile-panel">
             <p><a href="{{ url_for('logout')}}">Выйти из профиля</a></p>
             <ul class="profile-info">
-                <li>Имя: {{ user_info[0] }}</li>
-                <li>Email: {{ user_info[1] }}</li>
-                <hr align="left" width="300px">
-                <li>Имя: {{ user_info[0] }}</li>
-                <li>Email: {{ user_info[1] }}</li>
+                <li>Имя: {{ current_user.getName() }}</li>
+                <hr align="left" width="150px">
+                <li>Email: {{ current_user.getEmail() }}</li>
             </ul>
         </td>
     </tr>
