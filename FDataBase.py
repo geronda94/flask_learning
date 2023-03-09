@@ -76,7 +76,7 @@ class FDataBase:
                 print('ПОльзователь с таким email уже существует')
                 return False
 
-            self.__cur.execute(f"INSERT INTO users VALUES(NULL, ?, ?, ?, ?)", (name, email, password, tm))
+            self.__cur.execute(f"INSERT INTO users VALUES(NULL, ?, ?, ?, NULL, ?)", (name, email, password, tm))
             self.__db.commit()
 
         except sqlite3.Error as e:

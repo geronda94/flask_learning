@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from UserLogin import UserLogin
 
-
+MAX_CONTENT_LENGTH = 1024*1024
 DATABASE = 'flsite.db'
 DEBUG = True
 SECRET_KEY = 'dfsajhfaskjhbcah2138eduihknd3u8923uhfwe'
