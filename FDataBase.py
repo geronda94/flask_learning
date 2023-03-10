@@ -70,13 +70,13 @@ class FDataBase:
     def addUser(self, name, email, password):
         tm = math.floor(time.time())
         try:
-            self.__cur.execute(f"SELECT COUNT() as 'count' FROM users WHERE email LIKE '{email}'")
+            self.__cur.execute(f"SELECT COUNT() as 'count' FROM users WHERE email LIKE '{email}';")
             res = self.__cur.fetchone()
             if res['count'] > 0:
                 print('Пользователь с таким email уже существует')
                 return False
 
-            self.__cur.execute(f"INSERT INTO users VALUES(NULL, ?, ?, ?, NULL, ?)", (name, email, password, tm))
+            self.__cur.execute(f"INSERT INTO users VALUES(NULL, ?, ?, ?, NULL, ?);", (name, email, password, tm))
             self.__db.commit()
 
         except sqlite3.Error as e:
@@ -88,7 +88,7 @@ class FDataBase:
 
     def getUser(self, user_id):
         try:
-            self.__cur.execute(f"SELECT * FROM users WHERE id='{user_id}' LIMIT 1")
+            self.__cur.execute(f"SELECT * FROM users WHERE id='{user_id}' LIMIT 1;")
             res = self.__cur.fetchone()
             if not res:
                 print('Пользователь не найден')
@@ -102,7 +102,7 @@ class FDataBase:
 
     def getUserByEmail(self, email):
         try:
-            self.__cur.execute(f"SELECT * FROM users WHERE email='{email}' LIMIT 1")
+            self.__cur.execute(f"SELECT * FROM users WHERE email='{email}' LIMIT 1;")
             res = self.__cur.fetchone()
             if not res:
                 print('Пользователь не найден')
@@ -110,7 +110,7 @@ class FDataBase:
 
             return res
         except sqlite3.Error as e:
-            print('Ошибка  получения данных из БД', + str(e))
+            print('Ошибка  получения данных из БД',  str(e))
 
         return False
 

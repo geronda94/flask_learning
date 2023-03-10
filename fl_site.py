@@ -87,7 +87,19 @@ def login():
         return redirect(url_for('profile'))
 
     form = LoginForm()
+    if form.validate_on_submit():
+        user = dbase.getUserByEmail(form.email.data)
+        if user and check_password_hash(user['password'], form.psw.data):
+            userlogin = UserLogin().create(user)
+            rm = form.remember.data
+            login_user(userlogin, remember=rm)
+            return redirect(request.args.get("next") or url_for('profile'))
+
+        flash('Неверная пара ЛОГИН - ПАРОЛЬ', 'error')
+
     return render_template('login.html', menu=dbase.getMenu(), title='Авторизация', form=form)
+
+
     # if request.method == 'POST':
     #     user=dbase.getUserByEmail(request.form['email'])
     #     if user and check_password_hash(user['password'], request.form['psw']):

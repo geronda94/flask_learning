@@ -9,17 +9,23 @@ class UserLogin(UserMixin):
 
     def create(self, user):
         self.__user = user
+        print(user)
         return self
 
     def get_id(self):
-        return str(self.__user['id'])
-
+        res = str(self.__user['id'])
+        print(res)
+        return res
 
     def getName(self):
-        return self.__user['name']if self.__user['name'] else "Без имени"
+        res=str(self.__user['name'] if self.__user['name'] else "Без имени")
+        return res
+
 
     def getEmail(self):
-        return self.__user['email'] if self.__user['email'] else "email"
+        res = str(self.__user['email'] if self.__user['email'] else "Без имени")
+        print(res)
+        return res
 
     def getAvatar(self, app):
         img = None
@@ -33,6 +39,8 @@ class UserLogin(UserMixin):
         else:
             img = self.__user['avatar']
         return img
+
+
 
     def verifyExt(self, filename):
         ext = filename.rsplit('.',1)[1]
