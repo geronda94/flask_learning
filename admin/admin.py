@@ -2,10 +2,19 @@ from flask import Blueprint, request, redirect, url_for, flash, render_template,
 
 admin = Blueprint('admnin', __name__, template_folder='templates', static_folder='static')
 
+menu=[
+    {'url':'index', 'title':'Панель'},
+    {'url':'logout', 'title':'Выход'}
+]
+
+
 
 @admin.route('/')
 def index():
-    return 'ADMIN'
+    if not isLogged():
+        return redirect(url_for('login_admin'))
+
+    return render_template('admin/index.html', menu=menu, title='Админ панель')
 
 def login_admin():
     session['admin_logged'] = 1
