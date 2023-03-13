@@ -1,21 +1,24 @@
-from datetime import datetime
-from flask import Flask
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///blog.db'
-#app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://user:password@localhost/mydatabase'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-class Users(db.model):
+
+class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
     psw = db.Column(db.String(500), nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
+    pr = db.relationship('Profiles', backref='users', uselist=False)
+
     def __repr__(self):
-        return f"<users {self.id}"
+        return f"<users {self.id}>"
 
 
 class Profiles(db.Model):
@@ -27,11 +30,49 @@ class Profiles(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
-        return f"<profiles> {self.id}"
+        return f"<profiles {self.id}>"
+
+
+@app.route("/")
+def index():
+    info = []
+    try:
+        info = Users.query.all()
+    except:
+        print("Ошибка чтения из БД")
+
+    return render_template("index.html", title="Главная", list=info)
+
+
+@app.route("/register", methods=("POST", "GET"))
+def register():
+    if request.method == "POST":
+        try:
+            hash = generate_password_hash(request.form['psw'])
+            u = Users(email=request.form['email'], psw=hash)
+            db.session.add(u)
+            db.session.flush()
+
+            p = Profiles(name=request.form['name'], old=request.form['old'],
+                         city = request.form['city'], user_id = u.id)
+            db.session.add(p)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            print('Ошибка при добавлении в БиДе')
+
+    return render_template('register.html', title='Регистрация')
+
+with app.app_context():
+    res = Users.query.filter_by(id=2).all()
+    res2 = Users.query.filter(Users.id > 1).all()
+    res3 = db.session.query(Users, Profiles).join(Profiles, Users.id==Profiles.user_id).all()
+    res4 = Users.query.all()
+    for i in res4:
+        print(i.pr.name)
 
 
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

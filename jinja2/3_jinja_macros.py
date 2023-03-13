@@ -19,24 +19,24 @@ persons = [
 
 price = [200,300,100]
 def summ2(): #Выводит сумму всех значений из списка
-    tpl = "Сумарная цена товара {{ cs | sum}}"
+    tpl = "Сумарная цена товара {{ css | sum}}"
     tm = Template(tpl)
     return tm.render(cs=price)
 
 
 def maxx(): #Выводит сумму всех значений с ключем price
-    tpl = "Сумарная цена автомобилей {{ (cs | max(attribute='price')).model }}"
+    tpl = "Сумарная цена автомобилей {{ (css | max(attribute='price')).model }}"
     tm = Template(tpl)
     return tm.render(cs=cars)
 
 def rand(): #Выводит сумму всех значений с ключем price
-    tpl = "Сумарная цена автомобилей {{ (cs | random).model }}"
+    tpl = "Сумарная цена автомобилей {{ (css | random).model }}"
     tm = Template(tpl)
     return tm.render(cs=cars)
 
 
 def repl(): #Выводит сумму всех значений с ключем price
-    tpl = "Сумарная цена автомобилей {{ cs | replace('e', 'E')}}"
+    tpl = "Сумарная цена автомобилей {{ css | replace('e', 'E')}}"
     tm = Template(tpl)
     return tm.render(cs=cars)
 
